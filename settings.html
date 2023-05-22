@@ -3,21 +3,28 @@
 	<head>
 		<title>Wiki Random Generator: Settings</title>
 		<script src="settings.js"></script>
+		<link rel="stylesheet" href="settings.css">
 	</head>
 	<body>
 		<header>
 			<h1>Wiki Random Generator</h1>
 		</header>
 		
+		<h3>Settings</h3>
 		<form action="/background.js" method="get">
-			<label for="wikiShortcut">Wiki shortcut:</label>
-			<input type="text" id="wikiShortcut">
-			<br><br>
-			<label for="isBlacklist">Is blacklist:</label>
-			<input type="checkbox" id="blacklist">
-			<br><br>
-			<label for="blacklist">Blacklist:</label>
-			<textarea id="blacklist" rows="10" cols="50"></textarea>
+			<div class="row">
+				<label for="wikiShortcut">Wiki shortcut:</label>
+				<input type="text" id="wikiShortcut">
+			</div>
+			<div class="row">
+				<label for="isBlacklist">Is blacklist:</label>
+				<input type="checkbox" id="blacklist">
+			</div>
+			<div class="row">
+				<label for="blacklist">Blacklist:</label>
+				<textarea id="blacklist" rows="10" cols="50"></textarea>
+			</div>
 		</form>
+		<button id="save">Save</button>
 	</body>
 </html>
