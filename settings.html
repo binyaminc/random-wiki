@@ -6,7 +6,18 @@
 	</head>
 	<body>
 		<header>
-		  <h1>Wiki Random Generator</h1>
+			<h1>Wiki Random Generator</h1>
 		</header>
+		
+		<form action="/background.js" method="get">
+			<label for="wikiShortcut">Wiki shortcut:</label>
+			<input type="text" id="wikiShortcut">
+			<br><br>
+			<label for="isBlacklist">Is blacklist:</label>
+			<input type="checkbox" id="blacklist">
+			<br><br>
+			<label for="blacklist">Blacklist:</label>
+			<textarea id="blacklist" rows="10" cols="50"></textarea>
+		</form>
 	</body>
 </html>
