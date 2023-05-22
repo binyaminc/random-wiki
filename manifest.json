@@ -1,8 +1,15 @@
 {
   "manifest_version": 2,
-  "name": "Wiki Extension",
+  
+  "name": "Wiki Semi Random",
+  "description": "Open a partially random wiki tab",
   "version": "1.0",
-  "description": "Open a random wiki tab",
+  
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  
   "background": {
     "scripts": ["background.js"],
     "persistent": false
@@ -16,8 +23,6 @@
       "description": "Open the wiki page"
     }
   },
-  "permissions": ["tabs"],
-  "browser_action": {
-    "default_icon": "icon.png"
-  }
+  
+  "permissions": ["tabs", "storage"]
 }
