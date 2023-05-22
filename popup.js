@@ -1,10 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
-	var generateButton = document.getElementById('random');
-	generateButton.addEventListener('click', function() {
-		// TODO: activate "openRandomWiki()" from background.js
-		chrome.tabs.getSelected(null, function(tab) {
-			alert("Hello..! It's my extension.");
+	
+	// When "Random" button is pressed - open random wiki
+	document.querySelector("#random").addEventListener("click", 
+		function () {
+			openRandomWiki()
 		});
-	}, false);
-	// TODO: add listener to "settings" button and open settings on chrome
+	
+	// When "Settings" button is pressed - open settings on chrome
+	document.querySelector("#settings").addEventListener("click", 
+		function () {
+			window.open(chrome.runtime.getURL("settings.html"));
+		});
 }, false);
