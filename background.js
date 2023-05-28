@@ -1,6 +1,24 @@
+var regStrip = /^[\r\t\f\v ]+|[\r\t\f\v ]+$/gm;  // regular expression to eliminate whitechars
+
+var defaults = {
+	isBlacklist: true,
+	isPartial: true,
+	blacklist: 'Bilateral relations\nartist'.replace(regStrip, '')
+}
+
 chrome.commands.onCommand.addListener(function(command) {
   if (command === "open_website") {
     openRandomWiki();
+  }
+});
+
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+    console.log(
+      `Storage key "${key}" in namespace "${namespace}" changed.`,
+      `Old value was "${oldValue}", new value is "${newValue}".`
+    );
+	defaults[key] = newValue;
   }
 });
 
@@ -43,10 +61,27 @@ async function generateRandomWiki() {
 }
 
 
-function isGoodDescription(description) {
-  // Check if the description meets my criteria
-  // TODO: Modify this function.
-  return !description || /^[a-j]/i.test(description);
+function isGoodDescription(urlDesc) {
+	// Check if the description meets my criteria
+	// TODO: Create vars to represent the value, and events to change their value
+	
+	var filterFunc = getFilterFunc(defaults["isPartial"]);
+	
+	var descs = defaults["blacklist"].split(/\n/).filter(Boolean);
+	
+	if (descs.some(descInList => urlDesc && filterFunc(descInList, urlDesc))) {
+		return defaults["isBlacklist"] ? false : true;
+	}
+	return defaults["isBlacklist"] ? true : false;
+}
+
+function getFilterFunc(isPartial) {
+	if (isPartial) {
+		return (descInList, urlDesc) => urlDesc.includes(descInList);
+	}
+	else {
+		return (descInList, urlDesc) => descInList == urlDesc;
+	}
 }
 
 function open_website(wikiUrl) {
