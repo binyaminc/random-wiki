@@ -24,25 +24,32 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
 
 async function openRandomWiki() {
 	
-	const [title, description, url] = await generateRandomWiki();
-
-	if(isGoodDescription(description)) {
-		console.log("good description: ", description);
-		open_website(url);
-	} else {
-		console.log("bad description: ", description);
-		openRandomWiki();  // try again
+	const pages = await generateRandomWiki();
+	
+	for (const page of pages) {
+		var [title, description, url] = page;
+		
+		if(isGoodDescription(description)) {
+			console.log("good description: ", description);
+			open_website(url);
+			return;
+		} else {
+			console.log("bad description: ", description);
+		}
 	}
+	openRandomWiki();  // if none of the pages worked - try again
 }
 
 async function generateRandomWiki() {
 	
-	var url = "https://en.wikipedia.org/w/api.php"; 
+	var url = "https://he.wikipedia.org/w/api.php"; 
+	
 	var params = {
 		action: "query",
 		format: "json",
 		generator: "random",
 		grnnamespace: "0",  // taking the main page
+		grnlimit: (defaults["isBlacklist"] ? "2" : "10"), // taking many pages at once
 		prop: "info|description",
 		inprop: "url"
 	};
@@ -53,17 +60,15 @@ async function generateRandomWiki() {
 	const response = await fetch(url);
 	const jsonData = await response.json();
 	
-	for (const [id, page] of Object.entries(jsonData.query.pages)) {
-		return [page.title, 
-				page.description,
-				page.canonicalurl];
-	}
+	return Object.entries(jsonData.query.pages).map(getImportantData)
 }
 
+function getImportantData([id, page]) {
+	return [page.title, page.description, page.canonicalurl]
+}
 
 function isGoodDescription(urlDesc) {
 	// Check if the description meets my criteria
-	// TODO: Create vars to represent the value, and events to change their value
 	
 	var filterFunc = getFilterFunc(defaults["isPartial"]);
 	
