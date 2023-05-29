@@ -1,4 +1,3 @@
-
 var regStrip = /^[\r\t\f\v ]+|[\r\t\f\v ]+$/gm;  // regular expression to eliminate whitechars
 
 var defaults = {
@@ -29,7 +28,15 @@ function save_options() {
 		isBlacklist: isBlacklist,
 		isPartial: isPartial,
 		blacklist: blacklist.replace(regStrip, "")
-	});
+	},
+    function () {
+      // Update status to let user know options were saved.
+      var status = document.getElementById("status");
+      status.textContent = "Options saved";
+      setTimeout(function () {
+        status.textContent = "";
+      }, 1000);
+    });
 }
 
 // Restores options from chrome.storage
