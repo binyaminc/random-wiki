@@ -17,6 +17,10 @@
 			<input type="text" id="wikiShortcut">
 		</div>
 		<div class="row">
+			<label for="lanPrefix">Choose a language:</label>
+			<select id="lanPrefix"></select>
+		</div>
+		<div class="row">
 			<label for="blacklist">Descriptions to exclude/include:<br>(one per line)</label>
 			<textarea id="blacklist" rows="8" cols="50"></textarea>
 		</div>
@@ -28,7 +32,7 @@
 			<label for="isPartial">Are the above partial?<br>(v - partial, empty - exact)</label>
 			<input type="checkbox" id="isPartial" checked>
 		</div>
-			
+		
 		<button id="save" style="float:left;">Save</button>
 		<div id="status" style="padding-left:70px; padding-top:3px"></div>
 	</body>

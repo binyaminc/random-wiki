@@ -7,10 +7,39 @@ var defaults = {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  restore_options();
 
-  document.getElementById("save").addEventListener("click", save_options);
+	initLanPrefix();
+	restore_options();
+
+	document.getElementById("save").addEventListener("click", save_options);
+	
 });
+
+function initLanPrefix() {
+	
+	chrome.runtime.getPackageDirectoryEntry(function(root) {
+		root.getFile('./languages.json', {}, function(fileEntry) {
+			fileEntry.file(function(file) {
+				var reader = new FileReader();
+				reader.onloadend = function(e) {
+					var myFile = JSON.parse(this.result);
+					/*do here whatever with your JS object(s)*/
+					const langs = Object.keys(myFile);
+					const select = document.getElementById("lanPrefix"); 
+					
+					langs.forEach((lang, index) => {
+						let newOption = new Option(lang, myFile[lang]);
+						if (lang == "\u05e2\u05d1\u05e8\u05d9\u05ea")  // hebrew
+							newOption.defaultSelected = true;
+						
+						select.add(newOption,undefined);
+					});
+				};
+				reader.readAsText(file);
+			});
+		});
+	});
+}
 
 // Saves options to chrome.storage
 function save_options() {
