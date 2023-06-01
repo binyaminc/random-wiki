@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function initLangPrefix() {
 	
 	chrome.runtime.getPackageDirectoryEntry(function(root) {
-		root.getFile('./languages.json', {}, function(fileEntry) {
+		root.getFile('./options/languages.json', {}, function(fileEntry) {
 			fileEntry.file(function(file) {
 				var reader = new FileReader();
 				reader.onloadend = function(e) {
