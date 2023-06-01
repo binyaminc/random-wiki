@@ -1,9 +1,12 @@
 var regStrip = /^[\r\t\f\v ]+|[\r\t\f\v ]+$/gm;  // regular expression to eliminate whitechars
 
 var defaults = {
+	langPrefix: 'he',
 	isBlacklist: true,
 	isPartial: true,
-	blacklist: 'Bilateral relations\nartist'.replace(regStrip, '')
+	blacklist: `\u05D9\u05D7\u05E1\u05D9 \u05D7\u05D5\u05E5
+				\u05E9\u05D7\u05E7\u05DF
+				\u05E9\u05D7\u05E7\u05E0\u05D9\u05EA`.replace(regStrip, '')
 }
 
 chrome.commands.onCommand.addListener(function(command) {
@@ -24,7 +27,7 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
 
 async function openRandomWiki() {
 	
-	const pages = await generateRandomWiki();
+	const pages = await generateRandomWikis();
 	
 	for (const page of pages) {
 		var [title, description, url] = page;
@@ -40,9 +43,9 @@ async function openRandomWiki() {
 	openRandomWiki();  // if none of the pages worked - try again
 }
 
-async function generateRandomWiki() {
+async function generateRandomWikis() {
 	
-	var url = "https://he.wikipedia.org/w/api.php"; 
+	var url = `https://${defaults['langPrefix']}.wikipedia.org/w/api.php`; 
 	
 	var params = {
 		action: "query",
@@ -71,12 +74,13 @@ function isGoodDescription(urlDesc) {
 	// Check if the description meets my criteria
 	
 	var filterFunc = getFilterFunc(defaults["isPartial"]);
-	
 	var descs = defaults["blacklist"].split(/\n/).filter(Boolean);
 	
+	// if the description is in the black/white list
 	if (descs.some(descInList => urlDesc && filterFunc(descInList, urlDesc))) {
 		return defaults["isBlacklist"] ? false : true;
 	}
+	// if the description is not in the list
 	return defaults["isBlacklist"] ? true : false;
 }
 
