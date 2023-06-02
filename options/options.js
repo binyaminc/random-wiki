@@ -54,6 +54,12 @@ function save_options() {
 	var isPartial = document.getElementById("isPartial").checked;
 	var blacklist = document.getElementById("blacklist").value;
 	
+	chrome.storage.sync.remove([
+		"langPrefix",
+		"isBlacklist",
+		"isPartial",
+		"blacklist"
+	]);
 	chrome.storage.sync.set(
 	{
 		langPrefix: langPrefix,
