@@ -15,6 +15,9 @@ chrome.commands.onCommand.addListener(function(command) {
   }
 });
 
+// restore data in the first time
+restore_options();
+// add a listener for each change in the future
 chrome.storage.onChanged.addListener((changes, namespace) => {
   for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
     console.log(
@@ -102,4 +105,15 @@ function open_website(wikiUrl) {
         chrome.tabs.create({ url: wikiUrl });
       }
     });
+}
+
+// Restores options from chrome.storage
+function restore_options() {
+  chrome.storage.sync.get(defaults, function (storage) {
+	
+	defaults["langPrefix"] = storage.langPrefix;
+    defaults["isBlacklist"] = storage.isBlacklist;
+    defaults["isPartial"] = storage.isPartial;
+	defaults["blacklist"] = storage.blacklist;
+  });
 }
