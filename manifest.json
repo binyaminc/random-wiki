@@ -16,6 +16,10 @@
   },
   "options_page": "options/options.html",
   
+  "web_accessible_resources": [
+    "options/languages.json"
+  ],
+  
   "commands": {
     "open_website": {
       "suggested_key": {

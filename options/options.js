@@ -19,32 +19,24 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function initLangPrefix() {
+	const url = chrome.runtime.getURL('options/languages.json');
 	
-	chrome.runtime.getPackageDirectoryEntry(function(root) {
-		root.getFile('./options/languages.json', {}, function(fileEntry) {
-			fileEntry.file(function(file) {
-				var reader = new FileReader();
-				reader.onloadend = function(e) {
-					var langFile = JSON.parse(this.result);
-					
-					// take the keys (language names) of the file
-					const langs = Object.keys(langFile);
-					
-					const select = document.getElementById("langPrefix"); 
-					
-					// for each language, add option in the 'select' tag
-					langs.forEach((lang, index) => {
-						let newOption = new Option(lang, langFile[lang]);
-						if (lang == "\u05e2\u05d1\u05e8\u05d9\u05ea")  // hebrew
-							newOption.defaultSelected = true;
-						
-						select.add(newOption,undefined);
-					});
-				};
-				reader.readAsText(file);
+	fetch(url)
+		.then((response) => response.json())
+		.then((json) => {
+			var langFile = json;
+			// take the keys (language names) of the file
+			const langs = Object.keys(langFile);
+			
+			const select = document.getElementById("langPrefix"); 
+			console.log("------lang middle");
+			// for each language, add option in the 'select' tag
+			langs.forEach((lang, index) => {
+				let newOption = new Option(lang, langFile[lang]);
+				select.add(newOption,undefined);
 			});
-		});
-	});
+		})
+		.then(() => restore_options());
 }
 
 // Saves options to chrome.storage
